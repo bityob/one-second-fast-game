@@ -4,11 +4,11 @@
 # can we parse in a second?
 
 from http.server import BaseHTTPRequestHandler
-from io import StringIO
+from io import BytesIO
 
 class HTTPRequest(BaseHTTPRequestHandler):
     def __init__(self, request_text):
-        self.rfile = StringIO(request_text)
+        self.rfile = BytesIO(request_text)
         self.raw_requestline = self.rfile.readline()
         self.error_code = self.error_message = None
         self.parse_request()
@@ -29,7 +29,7 @@ Accept-Language: en-GB,en-US;q=0.8,en;q=0.6
 
 def f(NUMBER):
     for _ in range(NUMBER):
-        HTTPRequest(request_text)
+        HTTPRequest(request_text.encode("utf8"))
 
 if __name__ == '__main__':
     import sys

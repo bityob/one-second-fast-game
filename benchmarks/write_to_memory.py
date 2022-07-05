@@ -9,10 +9,10 @@ CHUNK_SIZE = 1000000
 s = "a" * CHUNK_SIZE
 
 def f(NUMBER):
-    output = io.StringIO()
+    output = io.BytesIO()
     bytes_written = 0
     while bytes_written < NUMBER:
-        output.write(s)
+        output.write(s.encode("utf8"))
         bytes_written += CHUNK_SIZE
 
 if __name__ == '__main__':

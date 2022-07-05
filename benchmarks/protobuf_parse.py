@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, './setup/protobuf')
 from test_pb2 import TestMessage
 
-with open('./setup/protobuf/message.protobuf') as f:
+with open('./setup/protobuf/message.protobuf', "rb") as f:
     message = f.read()
 
 def f(NUMBER):

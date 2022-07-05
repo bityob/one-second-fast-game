@@ -5,7 +5,7 @@
 
 import msgpack
 
-with open('./setup/protobuf/message.msgpack') as f:
+with open('./setup/protobuf/message.msgpack', 'rb') as f:
     message = f.read()
 
 def f(NUMBER):

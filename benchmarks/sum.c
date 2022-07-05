@@ -4,8 +4,10 @@
 // this loop can we go through in a second?
 
 int main(int argc, char **argv) {
-    int NUMBER, i, s;
-    NUMBER = atoi(argv[1]);
+    int i;
+    long long NUMBER, s;
+    char *end;
+    NUMBER = strtoll(argv[1], &end, 10);
 
     for (s = i = 0; i < NUMBER; ++i) {
         s += 1;

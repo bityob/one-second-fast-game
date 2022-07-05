@@ -7,6 +7,7 @@ import signal
 import subprocess
 import sys
 import timeit
+from pathlib import Path
 
 OUTPUT_FILE = 'site/benchmarks.json'
 
@@ -54,7 +55,11 @@ def benchmark(prog):
 def compile(source):
     if source.endswith(".c"):
         binary = source.replace(".c", "")
-        subprocess.check_call(["gcc", "-O2", "-o", binary, source, "-lm"])
+        if binary == "benchmarks/sum":
+            # Too much optimized with -O2...
+            subprocess.check_call(["gcc", "-O1", "-o", binary, source, "-lm"])
+        else:
+            subprocess.check_call(["gcc", "-O2", "-o", binary, source, "-lm"])
     else:
         binary = source
     return source, binary
@@ -80,6 +85,9 @@ def write_json(results):
         f.write(j)
 
 def read_json():
+    if not Path(OUTPUT_FILE).is_file():
+        return {}
+
     with open(OUTPUT_FILE) as f:
         return json.load(f)
 
@@ -91,8 +99,12 @@ if __name__ == '__main__':
         write_json(all_benchmarks)
         sys.exit(0)
     else:
+        results = read_json()
         all_benchmarks = find_all_benchmarks()
-        results = {}
+        # Remove already exist benchmarks
+        all_benchmarks = [b for b in all_benchmarks if b.split("/")[1] not in results]
+
         for result in run_benchmarks(all_benchmarks):
             results.update(result)
-        write_json(results)
+            # Save each new result, so we can stop in the middle
+            write_json(results)
