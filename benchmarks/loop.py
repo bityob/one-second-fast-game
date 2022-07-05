@@ -4,7 +4,7 @@
 # empty loop can we go through in a second?
 
 def f(NUMBER):
-    for _ in xrange(NUMBER):
+    for _ in range(NUMBER):
         pass
 
 if __name__ == '__main__':

@@ -3,11 +3,11 @@
 # Number to guess: How many times can we
 # download google.com in a second?
 
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 
 def f(NUMBER):
-    for _ in xrange(NUMBER):
+    for _ in range(NUMBER):
         r = urlopen("http://google.com")
         r.read()
 

@@ -63,10 +63,15 @@ def compile(source):
 def run_benchmarks(benchmarks):
     for source in benchmarks:
         print("----> " + source)
-        yield benchmark(source)
+        try:
+            yield benchmark(source)
+        except Exception as ex:
+            print(f"ERROR: {ex}")
+
 
 def find_all_benchmarks():
     return glob.glob("benchmarks/*.*")
+
 
 def write_json(results):
     j = json.dumps(results, sort_keys=True,

@@ -15,13 +15,13 @@ def primes_sieve2(limit):
         if i * i > limit:
             continue
         if isprime:
-            for n in xrange(i*i, limit, i):     # Mark factors non-prime
+            for n in range(i*i, limit, i):     # Mark factors non-prime
                 a[n] = False
     return a
 
 def f(NUMBER):
     sieve = primes_sieve2(NUMBER)
-    for i in xrange(NUMBER-1, 0, -1):
+    for i in range(NUMBER-1, 0, -1):
         if sieve[i]:
             sys.stdout.write("%d " % i)
             return

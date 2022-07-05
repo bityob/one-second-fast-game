@@ -3,7 +3,7 @@
 import json
 
 #j = json.dumps({'%d' % (i): i for i in xrange(10000)})
-j = json.dumps(range(10000))
+j = json.dumps(list(range(10000)))
 
 class MyObject(object):
     def __init__(self):
@@ -36,7 +36,7 @@ class MyObject(object):
 
 
 def f(NUMBER):
-    for _ in xrange(NUMBER):
+    for _ in range(NUMBER):
         MyObject()
 
 if __name__ == '__main__':

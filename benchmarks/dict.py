@@ -9,7 +9,7 @@
 
 def f(NUMBER):
     d = {}
-    for i in xrange(NUMBER):
+    for i in range(NUMBER):
         d[i % 1000] = i
 
 if __name__ == '__main__':

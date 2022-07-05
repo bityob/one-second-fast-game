@@ -3,13 +3,13 @@
 # Number to guess: How many bytes can we write
 # to a string in memory in a second?
 
-import cStringIO
+import io
 
 CHUNK_SIZE = 1000000
 s = "a" * CHUNK_SIZE
 
 def f(NUMBER):
-    output = cStringIO.StringIO()
+    output = io.StringIO()
     bytes_written = 0
     while bytes_written < NUMBER:
         output.write(s)

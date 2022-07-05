@@ -9,7 +9,7 @@ with open('./setup/protobuf/message.msgpack') as f:
     message = f.read()
 
 def f(NUMBER):
-    for _ in xrange(NUMBER):
+    for _ in range(NUMBER):
         msgpack.unpackb(message)
 
 if __name__ == '__main__':

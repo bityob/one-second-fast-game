@@ -3,8 +3,8 @@
 # Number to guess: How many HTTP requests
 # can we parse in a second?
 
-from BaseHTTPServer import BaseHTTPRequestHandler
-from StringIO import StringIO
+from http.server import BaseHTTPRequestHandler
+from io import StringIO
 
 class HTTPRequest(BaseHTTPRequestHandler):
     def __init__(self, request_text):

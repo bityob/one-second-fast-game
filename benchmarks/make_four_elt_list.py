@@ -3,7 +3,7 @@
 import json
 
 def f(NUMBER):
-    for _ in xrange(NUMBER):
+    for _ in range(NUMBER):
         [0,1,2,3]
 
 if __name__ == '__main__':

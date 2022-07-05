@@ -12,7 +12,7 @@ def f(NUMBER):
     arr2 = []
     sum1 = 0
     sum2 = 0
-    for i in xrange(NUMBER):
+    for i in range(NUMBER):
         rand1 = random.randint(-10000, 10000)
         rand2 = random.randint(-10000, 10000)
         arr1.append(rand1)
@@ -22,10 +22,10 @@ def f(NUMBER):
     norm1 = math.sqrt(sum1)
     norm2 = math.sqrt(sum2)
     dot_product = 0
-    for i in xrange(NUMBER):
+    for i in range(NUMBER):
         # We normalize the vectors to unit vectors here
         dot_product += arr1[i] * 1.0 / norm1 * arr2[i] * 1.0 / norm2
-    print dot_product,
+    print(dot_product, end=' ')
 
 import sys
 f(int(sys.argv[1]))
