@@ -1,0 +1,162 @@
+{
+    "angle.c": {
+        "code": "#include <math.h>\n#include <stdlib.h>\n#include <stdio.h>\n\n// Number to guess: We generate two random unit vectors in \n// N dimensions and calculate their dot product. How big\n// can we make N in a second?\n\nint main(int argc, char **argv) {\n    int NUMBER, i;\n    double sum1 = 0;\n    double sum2 = 0;\n    NUMBER = atoi(argv[1]);\n\n    int* arr1 = malloc(sizeof(int) * NUMBER);\n    int* arr2 = malloc(sizeof(int) * NUMBER);\n\n    for (i = 0; i < NUMBER; ++i) {\n        int rand1 = rand() % 20000 - 10000;\n        int rand2 = rand() % 20000 - 10000;\n        arr1[i] = rand1;\n        arr2[i] = rand2;\n        sum1 += rand1 * rand1;\n        sum2 += rand2 * rand2;\n    }\n\n    double norm1 = sqrt(sum1);\n    double norm2 = sqrt(sum2);\n\n\n    double dot_product = 0;\n    for (i = 0; i < NUMBER; ++i) {\n        // We normalize the vectors to unit vectors here\n        double x1 = ((double) arr1[i]) / norm1;\n        double x2 = ((double) arr2[i]) / norm2;\n        dot_product += x1 * x2;\n    }\n\n    printf(\"%f \", dot_product);\n\n    return 0;\n}\n",
+        "exact_iters": 55882714,
+        "rounded_iters": 100000000
+    },
+    "angle.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: We generate two random unit vectors in \n# N dimensions and calculate their dot product. How big\n# can we make N in a second?\n\nimport math\nimport random\n\ndef f(NUMBER):\n    arr1 = []\n    arr2 = []\n    sum1 = 0\n    sum2 = 0\n    for i in range(NUMBER):\n        rand1 = random.randint(-10000, 10000)\n        rand2 = random.randint(-10000, 10000)\n        arr1.append(rand1)\n        sum1 += rand1 * rand1\n        sum2 += rand2 * rand2\n        arr2.append(rand2)\n    norm1 = math.sqrt(sum1)\n    norm2 = math.sqrt(sum2)\n    dot_product = 0\n    for i in range(NUMBER):\n        # We normalize the vectors to unit vectors here\n        dot_product += arr1[i] * 1.0 / norm1 * arr2[i] * 1.0 / norm2\n    print(dot_product, end=' ')\n\nimport sys\nf(int(sys.argv[1]))\n",
+        "exact_iters": 295578,
+        "rounded_iters": 100000
+    },
+    "bcrypt_hash.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many passwords\n# can we bcrypt in a second?\n\nimport bcrypt\n\npassword = 'a' * 100\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        bcrypt.hashpw(password.encode(\"utf8\"), bcrypt.gensalt())\n        \nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 6,
+        "rounded_iters": 10
+    },
+    "database_indexed.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we\n# select a row from an **indexed** table with \n# 10,000,000 rows?\n\nimport sqlite3\n\nconn = sqlite3.connect('./indexed_db.sqlite')\nc = conn.cursor()\ndef f(NUMBER):\n    query = \"select * from my_table where key = %d\" % 5\n    for i in range(NUMBER):\n        c.execute(query)\n        c.fetchall()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 113955,
+        "rounded_iters": 100000
+    },
+    "database_unindexed.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we\n# select a row from an **unindexed** table with \n# 10,000,000 rows?\n\nimport sqlite3\n\nconn = sqlite3.connect('./unindexed_db.sqlite')\nc = conn.cursor()\ndef f(NUMBER):\n    query = \"select * from my_table where key = %d\" % 5\n    for i in range(NUMBER):\n        c.execute(query)\n        c.fetchall()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 2,
+        "rounded_iters": 1
+    },
+    "dict.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many entries can\n# we add to a dictionary of a fixed maximum size\n# in a second?\n\n# Note: we take `i % 1000` to control\n# the size of the dictionary\n\ndef f(NUMBER):\n    d = {}\n    for i in range(NUMBER):\n        d[i % 1000] = i\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 14715661,
+        "rounded_iters": 10000000
+    },
+    "download_webpage.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we\n# download google.com in a second?\n\nfrom urllib.request import urlopen\n\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        r = urlopen(\"http://google.com\")\n        r.read()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 2,
+        "rounded_iters": 1
+    },
+    "fill_array.c": {
+        "code": "#include <stdlib.h>\n#include <stdio.h>\n\n// Number to guess: How big of an array (in bytes)\n// can we allocate and fill in a second?\n\n// this is intentionally more complicated than it needs to be\n// so that it matches the out-of-order version :)\n\nint main(int argc, char **argv) {\n    int NUMBER, i;\n    NUMBER = atoi(argv[1]);\n\n    char* array = malloc(NUMBER);\n    int j = 1;\n    for (i = 0; i < NUMBER; ++i) {\n        j = j * 2;\n        if (j > NUMBER) {\n            j = j - NUMBER;\n        }\n        array[i] = j;\n    }\n\n    printf(\"%d\", array[NUMBER / 7]);\n    // so that -O2 doesn't optimize out the loop\n\n    return 0;\n}\n",
+        "exact_iters": 975120041,
+        "rounded_iters": 1000000000
+    },
+    "fill_array_out_of_order.c": {
+        "code": "#include <stdlib.h>\n#include <stdio.h>\n\n// Number to guess: How big of an array (in bytes)\n// can we allocate and fill with 5s in a second?\n// The catch: We do it out of order instead of in order.\nint main(int argc, char **argv) {\n    int NUMBER, i;\n    NUMBER = atoi(argv[1]);\n\n    char* array = malloc(NUMBER);\n    int j = 1;\n    for (i = 0; i < NUMBER; ++i) {\n        j = j * 2;\n        if (j > NUMBER) {\n            j = j - NUMBER;\n        }\n        array[j] = j;\n    }\n\n    printf(\"%d\", array[NUMBER / 7]);\n    // so that -O2 doesn't optimize out the loop\n\n    return 0;\n}\n",
+        "exact_iters": 108899606,
+        "rounded_iters": 100000000
+    },
+    "find-filenames.sh": {
+        "code": "#!/bin/bash\n\n# Number to guess: How many files can `find` list in a second?\n# Note: the files will be in the filesystem cache.\n\nfind / -name '*' 2> /dev/null | head -n $1 > /dev/null\n",
+        "exact_iters": 843328,
+        "rounded_iters": 1000000
+    },
+    "grep_bytes.sh": {
+        "code": "#!/bin/bash \n\n# Number to guess: How many bytes can `grep`\n# search, unsuccessfully, in a second?\n# Note: the bytes are in memory\n\n\nNUMBER=$1\n\ncat /dev/zero | head -c $NUMBER | grep blah\nexit 0\n",
+        "exact_iters": 1900233105,
+        "rounded_iters": 1000000000
+    },
+    "grep_files_and_fail.sh": {
+        "code": "#!/bin/bash \n\n# Number to guess: How many files can `grep`\n# search, unsuccessfully, in a second?\n# Note: the file contents will be in the filesystem cache.\n\nNUMBER=$1\n\ngrep -r --files-without-match --binary-files=without-match pandapandapandapanda /usr 2> /dev/null | head -n $NUMBER > /dev/null \n",
+        "exact_iters": 77831,
+        "rounded_iters": 100000
+    },
+    "hash.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many bytes can we md5sum in a second?\n\nimport hashlib\n\nCHUNK_SIZE = 10000\ns = 'a' * CHUNK_SIZE\n\n\ndef f(NUMBER):\n    bytes_hashed = 0\n    h = hashlib.md5()\n    while bytes_hashed < NUMBER:\n        h.update(s.encode(\"utf8\"))\n        bytes_hashed += CHUNK_SIZE\n    h.digest()\n\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 886472764,
+        "rounded_iters": 1000000000
+    },
+    "json_parse.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we parse\n# 64K of JSON in a second?\n\nimport json\n\nwith open('./setup/protobuf/message.json') as f:\n    message = f.read()\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        json.loads(message)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 2075,
+        "rounded_iters": 1000
+    },
+    "loop.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many iterations of an\n# empty loop can we go through in a second?\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        pass\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 81817884,
+        "rounded_iters": 100000000
+    },
+    "make_empty_list.py": {
+        "code": "#!/usr/bin/env python\n\nimport json\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        []\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 34698767,
+        "rounded_iters": 100000000
+    },
+    "make_four_elt_list.py": {
+        "code": "#!/usr/bin/env python\n\nimport json\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        [0,1,2,3]\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 16187228,
+        "rounded_iters": 10000000
+    },
+    "make_one_elt_list.py": {
+        "code": "#!/usr/bin/env python\n\nimport json\n\ndef f(NUMBER):\n    for i in range(NUMBER):\n        [0]\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 21545202,
+        "rounded_iters": 10000000
+    },
+    "msgpack_parse.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we parse\n# 46K of msgpack data in a second?\n\nimport msgpack\n\nwith open('./setup/protobuf/message.msgpack', 'rb') as f:\n    message = f.read()\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        msgpack.unpackb(message)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 85,
+        "rounded_iters": 100
+    },
+    "object_create.py": {
+        "code": "#!/usr/bin/env python\n\nimport json\n\n#j = json.dumps({'%d' % (i): i for i in xrange(10000)})\nj = json.dumps(list(range(10000)))\n\nclass MyObject(object):\n    def __init__(self):\n        self.a  = 'a'\n        self.b  = 'b'\n        self.c  = 'a'\n        self.d  = 'b'\n        self.e  = 'a'\n        self.f  = 'b'\n        self.g  = 'a'\n        self.h  = 'b'\n        self.i  = 'a'\n        self.j  = 'b'\n        self.k  = 'a'\n        self.l  = 'b'\n        self.m  = 'a'\n        self.n  = 'b'\n        self.o  = 'a'\n        self.p  = 'b'\n        self.q  = 'a'\n        self.r  = 'b'\n        self.s  = 'a'\n        self.t  = 'b'\n        self.u  = 'a'\n        self.v  = 'b'\n        self.w  = 'b'\n        self.x  = 'b'\n        self.y  = 'b'\n        self.z  = 'b'\n\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        MyObject()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 843328,
+        "rounded_iters": 1000000
+    },
+    "parse_http_request.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many HTTP requests\n# can we parse in a second?\n\nfrom http.server import BaseHTTPRequestHandler\nfrom io import BytesIO\n\nclass HTTPRequest(BaseHTTPRequestHandler):\n    def __init__(self, request_text):\n        self.rfile = BytesIO(request_text)\n        self.raw_requestline = self.rfile.readline()\n        self.error_code = self.error_message = None\n        self.parse_request()\n\n    def send_error(self, code, message):\n        self.error_code = code\n        self.error_message = message\n\nrequest_text = \"\"\"GET / HTTP/1.1\nHost: localhost:8001\nConnection: keep-alive\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\nUpgrade-Insecure-Requests: 1\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36\nAccept-Encoding: gzip, deflate, sdch\nAccept-Language: en-GB,en-US;q=0.8,en;q=0.6\n\"\"\"\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        HTTPRequest(request_text.encode(\"utf8\"))\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 22541,
+        "rounded_iters": 10000
+    },
+    "primes.c": {
+        "code": "#include <math.h>\n#include <stdlib.h>\n#include <stdio.h>\n#include <stdbool.h>\n\n// Number to guess: How large of a prime can we find, \n// using a naive algorithm, in a second?\n\nbool divides(int* primes, int size, int number) {\n    for (int i = 0; i < size; i++) {\n        int p = primes[i];\n        if (number % p == 0) {\n            return true;\n        }\n        if (number < p * p) {\n            return false;\n        }\n    }\n    return false;\n}\n\nint main(int argc, char **argv) {\n    int NUMBER, i;\n    NUMBER = atoi(argv[1]);\n    int* primes = malloc(NUMBER * sizeof(int));\n    int size = 1;\n    primes[0] = 2;\n    for (int current = 2; current < NUMBER; current++) {\n        if (!divides(primes, size, current)) {\n            primes[size] = current;\n            size++;\n        }\n    }\n    printf(\"%d \", primes[size - 1]);\n}\n",
+        "exact_iters": 17805951,
+        "rounded_iters": 10000000
+    },
+    "primes.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How large of a prime can we find, \n# using a naive algorithm, in a second?\n\nimport sys\n\ndef divides(primes, number):\n    for p in primes:\n        if number % p == 0:\n            return True\n        if number < p * p:\n            return False\n    return False\n\ndef f(NUMBER):\n    primes = [2]\n    current = 2\n    while current < NUMBER:\n        current += 1\n        if not divides(primes, current):\n            primes.append(current)\n    sys.stdout.write(\"%d \" % primes[-1])\n\nf(int(sys.argv[1]))\n",
+        "exact_iters": 927661,
+        "rounded_iters": 1000000
+    },
+    "primes_sieve.c": {
+        "code": "#include <math.h>\n#include <stdlib.h>\n#include <stdio.h>\n#include <stdbool.h>\n#include <string.h>\n\n// Number to guess: How large of a prime can we find, \n// using a naive algorithm, in a second?\n\nchar* primes_sieve(int limit) {\n    char* a = malloc(sizeof(char) * limit);\n    double sqrt_limit =  sqrt(limit);\n    memset(a, 1, limit);\n    a[0] = a[1] = 0;\n    for (long i = 0; i < sqrt_limit; ++i) {\n        char is_prime = a[i];\n        if (is_prime > 0) {\n            for (long j = i * i; j < limit; j += i) {\n                a[j] = 0;\n            }\n        }\n    }\n    return a;\n}\n\nint main(int argc, char **argv) {\n    int NUMBER, i;\n    NUMBER = atoi(argv[1]);\n    char* sieve = primes_sieve(NUMBER);\n    // print the  biggest prime we found\n    for (int i = NUMBER - 1; i > 0; i--) {\n        if (sieve[i] > 0) {\n            printf(\"%d \", i);\n            break;\n        }\n    }\n    return 0;\n}\n",
+        "exact_iters": 119789567,
+        "rounded_iters": 100000000
+    },
+    "primes_sieve.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How large of a prime can we find, \n# using a naive algorithm, in a second?\n\nimport sys\nimport itertools\nimport math\n\ndef primes_sieve2(limit):\n    a = [True] * limit                          # Initialize the primality list\n    a[0] = a[1] = False\n\n    for (i, isprime) in enumerate(a):\n        if i * i > limit:\n            continue\n        if isprime:\n            for n in range(i*i, limit, i):     # Mark factors non-prime\n                a[n] = False\n    return a\n\ndef f(NUMBER):\n    sieve = primes_sieve2(NUMBER)\n    for i in range(NUMBER-1, 0, -1):\n        if sieve[i]:\n            sys.stdout.write(\"%d \" % i)\n            return\n\nf(int(sys.argv[1]))\n",
+        "exact_iters": 8306604,
+        "rounded_iters": 10000000
+    },
+    "protobuf_parse.py": {
+        "code": "#!/usr/bin/env python\n\nimport sys\nsys.path.insert(0, './setup/protobuf')\nfrom test_pb2 import TestMessage\n\nwith open('./setup/protobuf/message.protobuf', \"rb\") as f:\n    message = f.read()\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        m = TestMessage()\n        TestMessage.ParseFromString(m, message)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 2764,
+        "rounded_iters": 1000
+    },
+    "run_bin_true.sh": {
+        "code": "#!/bin/bash\n\nNUMBER=$1\n\nfor i in $(seq $NUMBER); do\n    /usr/bin/env true;\ndone\n",
+        "exact_iters": 1287,
+        "rounded_iters": 1000
+    },
+    "run_python.sh": {
+        "code": "#!/bin/bash\n\n# Number to guess: How many times can we start\n# the Python interpreter in a second?\n\nNUMBER=$1\n\nfor i in $(seq $NUMBER); do\n    python -c '';\ndone\n",
+        "exact_iters": 70,
+        "rounded_iters": 100
+    },
+    "sum.c": {
+        "code": "#include <stdlib.h>\n\n// Number to guess: How many iterations of\n// this loop can we go through in a second?\n\nint main(int argc, char **argv) {\n    int i;\n    long long NUMBER, s;\n    char *end;\n    NUMBER = strtoll(argv[1], &end, 10);\n\n    for (s = i = 0; i < NUMBER; ++i) {\n        s += 1;\n    }\n\n    return 0;\n}\n",
+        "exact_iters": 4073318427,
+        "rounded_iters": 10000000000
+    },
+    "sum.py": {
+        "code": "#!/usr/bin/env python\n\ndef f(NUMBER):\n    s = 0\n    for i in range(NUMBER):\n        s += 1\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 28676666,
+        "rounded_iters": 10000000
+    },
+    "write_to_disk.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many bytes can we write\n# to an output file in a second?\n# Note: we make sure everything is sync'd to disk\n# before exiting :)\nimport tempfile\nimport os\n\nCHUNK_SIZE = 1000000\ns = \"a\" * CHUNK_SIZE\n\ndef cleanup(f, name):\n    f.flush()\n    os.fsync(f.fileno())\n    f.close()\n    try:\n        os.remove(name)\n    except:\n        pass\n\ndef f(NUMBER):\n    name = './out'\n    f = open(name, 'w')\n    bytes_written = 0\n    while bytes_written < NUMBER:\n        f.write(s)\n        bytes_written += CHUNK_SIZE\n    cleanup(f, name)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 500390763,
+        "rounded_iters": 1000000000
+    },
+    "write_to_memory.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many bytes can we write\n# to a string in memory in a second?\n\nimport io\n\nCHUNK_SIZE = 1000000\ns = \"a\" * CHUNK_SIZE\n\ndef f(NUMBER):\n    output = io.BytesIO()\n    bytes_written = 0\n    while bytes_written < NUMBER:\n        output.write(s.encode(\"utf8\"))\n        bytes_written += CHUNK_SIZE\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 3060344421,
+        "rounded_iters": 1000000000
+    }
+}
