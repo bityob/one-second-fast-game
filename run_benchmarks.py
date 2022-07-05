@@ -38,9 +38,9 @@ def benchmark(prog):
                 number=1)
 
     rounded_iters = round_nearest_magnitude(iters)
-    print "   rounded iterations:", rounded_iters
-    print "   exact iterations:  ", iters
-    print "   final time taken:  ", t
+    print("   rounded iterations:", rounded_iters)
+    print("   exact iterations:  ", iters)
+    print("   final time taken:  ", t)
     results = {
         'rounded_iters': rounded_iters,
         'exact_iters': iters,
@@ -54,7 +54,7 @@ def benchmark(prog):
 def compile(source):
     if source.endswith(".c"):
         binary = source.replace(".c", "")
-        subprocess.check_call(["gcc", "-O2", "-o", binary, source])
+        subprocess.check_call(["gcc", "-O2", "-o", binary, source, "-lm"])
     else:
         binary = source
     return source, binary
@@ -62,7 +62,7 @@ def compile(source):
 
 def run_benchmarks(benchmarks):
     for source in benchmarks:
-        print "----> " + source
+        print("----> " + source)
         yield benchmark(source)
 
 def find_all_benchmarks():

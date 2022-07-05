@@ -1,7 +1,7 @@
 {
   "scripts": {
     "postinstall": "node_modules/.bin/jspm install",
-    "serve": "node_modules/.bin/jspm-server site/"
+    "serve": "node_modules/.bin/jspm-server site/ --port=8888"
   },
   "jspm": {
     "directories": {
