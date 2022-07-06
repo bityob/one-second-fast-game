@@ -55,11 +55,7 @@ def benchmark(prog):
 def compile(source):
     if source.endswith(".c"):
         binary = source.replace(".c", "")
-        if binary == "benchmarks/sum":
-            # Too much optimized with -O2...
-            subprocess.check_call(["gcc", "-O1", "-o", binary, source, "-lm"])
-        else:
-            subprocess.check_call(["gcc", "-O2", "-o", binary, source, "-lm"])
+        subprocess.check_call(["gcc", "-O2", "-o", binary, source, "-lm"])
     else:
         binary = source
     return source, binary
