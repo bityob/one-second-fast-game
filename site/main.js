@@ -97,7 +97,7 @@ class AnswerSelector extends React.Component {
     render() {
         let { name, onChange, selectedAnswer, exactAnswer } = this.props;
         const options = [1, 10, 100, 1000, 10000, 100000,
-            1000000, 10000000, 100000000, 100000000, 1000000000];
+            1000000, 10000000, 100000000, 100000000, 1000000000, 10000000000]; //, 100000000000, 1000000000000];
         return <ul>
         { options.map(val => <AnswerChoice
                 key={val}
@@ -263,10 +263,13 @@ function questions(state=getInitialState(curriculum), action) {
 }
 
 var english = function(iters) {
+    var trillion = Math.pow(10,12)
     var bil = Math.pow(10, 9)
     var mil = Math.pow(10, 6)
     var thousand = 1000
-    if (iters >= bil) {
+    if (iters >= trillion) {
+        return Math.round(iters / trillion) + ",000,000,000,000"
+    } else if (iters >= bil) {
         return Math.round(iters / bil) + ",000,000,000"
     } else if (iters >= mil) {
         return Math.round(iters / mil) + ",000,000"

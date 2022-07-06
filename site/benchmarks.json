@@ -14,6 +14,16 @@
         "exact_iters": 6,
         "rounded_iters": 10
     },
+    "branch.py": {
+        "code": "#!/usr/bin/env python\n\n# Number to guess: How many times per second can we\n# sort an already sorted array with 500 elements?\n# (small amount of branch mispredictions)\n\ndef f(NUMBER):\n    l = range(500)\n    for _ in range(NUMBER):\n        sorted(l)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 183529,
+        "rounded_iters": 100000
+    },
+    "branch_mispredictions.py": {
+        "code": "#!/usr/bin/env python\n\nimport random\n\n# Number to guess: How many times per second can we\n# sort a randomly sorted array with 500 elements?\n# (large amount of branch mispredictions)\n\ndef f(NUMBER):\n    l = random.sample(range(500), 500)\n    for _ in range(NUMBER):\n        sorted(l)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
+        "exact_iters": 70755,
+        "rounded_iters": 100000
+    },
     "database_indexed.py": {
         "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we\n# select a row from an **indexed** table with \n# 10,000,000 rows?\n\nimport sqlite3\n\nconn = sqlite3.connect('./indexed_db.sqlite')\nc = conn.cursor()\ndef f(NUMBER):\n    query = \"select * from my_table where key = %d\" % 5\n    for i in range(NUMBER):\n        c.execute(query)\n        c.fetchall()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
         "exact_iters": 183529,
@@ -66,7 +76,7 @@
     },
     "json_parse.py": {
         "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we parse\n# 64K of JSON in a second?\n\nimport json\n\nwith open('./setup/protobuf/message.json') as f:\n    message = f.read()\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        json.loads(message)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
-        "exact_iters": 1714,
+        "exact_iters": 2283,
         "rounded_iters": 1000
     },
     "loop.py": {
@@ -91,8 +101,8 @@
     },
     "msgpack_parse.py": {
         "code": "#!/usr/bin/env python\n\n# Number to guess: How many times can we parse\n# 46K of msgpack data in a second?\n\nimport msgpack\n\nwith open('./setup/protobuf/message.msgpack', 'rb') as f:\n    message = f.read()\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        msgpack.unpackb(message)\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
-        "exact_iters": 85,
-        "rounded_iters": 100
+        "exact_iters": 4000,
+        "rounded_iters": 10000
     },
     "object_create.py": {
         "code": "#!/usr/bin/env python\n\nimport json\n\n#j = json.dumps({'%d' % (i): i for i in xrange(10000)})\nj = json.dumps(list(range(10000)))\n\nclass MyObject(object):\n    def __init__(self):\n        self.a  = 'a'\n        self.b  = 'b'\n        self.c  = 'a'\n        self.d  = 'b'\n        self.e  = 'a'\n        self.f  = 'b'\n        self.g  = 'a'\n        self.h  = 'b'\n        self.i  = 'a'\n        self.j  = 'b'\n        self.k  = 'a'\n        self.l  = 'b'\n        self.m  = 'a'\n        self.n  = 'b'\n        self.o  = 'a'\n        self.p  = 'b'\n        self.q  = 'a'\n        self.r  = 'b'\n        self.s  = 'a'\n        self.t  = 'b'\n        self.u  = 'a'\n        self.v  = 'b'\n        self.w  = 'b'\n        self.x  = 'b'\n        self.y  = 'b'\n        self.z  = 'b'\n\n\ndef f(NUMBER):\n    for _ in range(NUMBER):\n        MyObject()\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
@@ -141,8 +151,8 @@
     },
     "sum.c": {
         "code": "#include <stdlib.h>\n#include <stdio.h>\n\n// Number to guess: How many iterations of\n// this loop can we go through in a second?\n\nint main(int argc, char **argv) {\n    unsigned int NUMBER, i, s;\n    NUMBER = atoi(argv[1]);\n\n    for (s = i = 0; i < NUMBER; ++i) {\n        s += i;\n    }\n    printf(\"%u\\n\", s);\n\n    return 0;\n}",
-        "exact_iters": 26186375848185,
-        "rounded_iters": 10000000000000
+        "exact_iters": 3703016751,
+        "rounded_iters": 10000000000
     },
     "sum.py": {
         "code": "#!/usr/bin/env python\n\ndef f(NUMBER):\n    s = 0\n    for i in range(NUMBER):\n        s += 1\n\nif __name__ == '__main__':\n    import sys\n    f(int(sys.argv[1]))\n",
